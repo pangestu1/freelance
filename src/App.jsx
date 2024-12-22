@@ -1,16 +1,17 @@
-// src/App.jsx
 import React from "react";
-import login from "./pages/login.jsx";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import Login from "./pages/login.jsx";
 import Register from "./pages/register.jsx";
 
 function App() {
   return (
-      <>
-      
-      <login />
-      <Register/>
-      </>
-    
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Navigate to="/Register" replace />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
