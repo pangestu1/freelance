@@ -15,6 +15,11 @@ function Login() {
     console.log("Password:", password);
   };
 
+  const navigateToRegister = (e) => {
+    e.preventDefault();
+    navigate("/register");
+  };
+
   return (
     <div className="login-container"> {/* Class untuk container login */}
       <img src={background} alt="background" className="background" />
@@ -43,6 +48,12 @@ function Login() {
           </label>
         </div>
         <button type="submit">Login</button>
+        <p>
+          Dont have an account?{" "}
+          <a href="/register" onClick={navigateToRegister}>
+            Sign up
+          </a>
+        </p>
       </form>
     </div>
   );
