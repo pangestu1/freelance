@@ -1,5 +1,8 @@
 // src/pages/login.jsx
 import React, { useState } from "react";
+import "./reset.css";
+import "./login.css";
+import background from "../assets/signup.png";
 
 function Login() {
   const [username, setUsername] = useState("");
@@ -13,10 +16,11 @@ function Login() {
   };
 
   return (
-    <div>
-      <h2>Login</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
+    <div className="login-container"> {/* Class untuk container login */}
+      <img src={background} alt="background" className="background" />
+      <form className="login-form" onSubmit={handleSubmit}> {/* Class untuk form login */}
+        <h2>Login</h2>
+        <div className="form-group"> {/* Class untuk grup input */}
           <label>
             Username:
             <input
@@ -27,7 +31,7 @@ function Login() {
             />
           </label>
         </div>
-        <div>
+        <div className="form-group"> {/* Class untuk grup input */}
           <label>
             Password:
             <input
