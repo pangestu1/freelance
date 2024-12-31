@@ -11,23 +11,23 @@ const Register = () => {
     occupation: "",
     email: "",
     password: "",
-    confirmPassword: ""
+    confirmPassword: "",
   });
   const [error, setError] = useState("");
 
   const handleChange = (e) => {
     const { id, value } = e.target;
-    setFormData(prevState => ({
+    setFormData((prevState) => ({
       ...prevState,
-      [id]: value
+      [id]: value,
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
 
-    // Validation password kudu lewih ti 6 character
+    // Validasi password
     if (formData.password.length < 6) {
       setError("Password must be at least 6 characters long");
       return;
@@ -39,30 +39,23 @@ const Register = () => {
     }
 
     try {
-      // cek email mun geus aya
-      const existingUsers = JSON.parse(localStorage.getItem("users") || "[]");
-      if (existingUsers.some(user => user.email === formData.email)) {
-        setError("Email already registered");
-        return;
+      // Kirim data ke API
+      const response = await fetch("http://localhost:5000/api/v1/users", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert("Registration successful! Please login.");
+        navigate("/login"); // Navigasi ke halaman login setelah registrasi berhasil
+      } else {
+        setError(data.error || "Failed to register. Please try again.");
       }
-
-      
-      const newUser = {
-        fullname: formData.fullname,
-        occupation: formData.occupation,
-        email: formData.email,
-        password: formData.password,
-        createdAt: new Date().toISOString()
-      };
-
-      existingUsers.push(newUser);
-      localStorage.setItem("users", JSON.stringify(existingUsers));
-      
-      // Alert success
-      alert("Registration successful! Please login.");
-      
-      // navigasi to login
-      navigate("/login");
     } catch (err) {
       setError("Failed to register. Please try again.");
     }
@@ -72,15 +65,24 @@ const Register = () => {
     e.preventDefault();
     navigate("/login");
   };
+  const navigateTouploadAvatar = (e) => {
+    e.preventDefault();
+    navigate("/login");
+  };
 
   return (
     <div className="register-container">
       <img src={background} alt="background" className="background" />
       <form className="register-form" onSubmit={handleSubmit}>
         <h2>Create New Account</h2>
-        
-        {error && <div className="error-message" style={{ color: 'red', marginBottom: '1rem' }}>{error}</div>}
-        
+        {error && (
+          <div
+            className="error-message"
+            style={{ color: "red", marginBottom: "1rem" }}
+          >
+            {error}
+          </div>
+        )}
         <div className="form-group">
           <label htmlFor="fullname">Full Name</label>
           <input
@@ -91,7 +93,6 @@ const Register = () => {
             required
           />
         </div>
-        
         <div className="form-group">
           <label htmlFor="occupation">Occupation</label>
           <input
@@ -102,7 +103,6 @@ const Register = () => {
             required
           />
         </div>
-        
         <div className="form-group">
           <label htmlFor="email">Email Address</label>
           <input
@@ -113,7 +113,6 @@ const Register = () => {
             required
           />
         </div>
-        
         <div className="form-group">
           <label htmlFor="password">Password</label>
           <input
@@ -124,7 +123,6 @@ const Register = () => {
             required
           />
         </div>
-
         <div className="form-group">
           <label htmlFor="confirmPassword">Confirm Password</label>
           <input
@@ -135,8 +133,13 @@ const Register = () => {
             required
           />
         </div>
-        
-        <button type="submit">Register Account</button>
+        <button
+          type="submit"
+          onClick={handleSubmit}
+          onSubmit={navigateTouploadAvatar}
+        >
+          Register Account
+        </button>
         <br /> <br />
         <p>
           Already have an account?{" "}
